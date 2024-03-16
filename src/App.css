@@ -1,0 +1,135 @@
+.App {
+  text-align: center;
+  display: flex;
+}
+
+.App-logo {
+  height: 40vmin;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .App-logo {
+    animation: App-logo-spin infinite 20s linear;
+  }
+}
+
+.App-header {
+  background-color: #282c34;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
+
+.App-link {
+  color: #61dafb;
+}
+
+@keyframes App-logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+
+/* CSS equivalent to Tailwind classes */
+.message-bubble {
+  display: flex;
+  border-radius: 0.25rem; /* equivalent to 'rounded' */
+  padding: 0.5rem 1rem; /* equivalent to 'px-4 py-2' */
+  max-width: 80%; /* equivalent to 'max-w-[80%]' */
+  margin-bottom: 2rem; /* equivalent to 'mb-8' */
+}
+
+.message-bubble-user {
+  background-color: #0284c7; /* equivalent to 'bg-sky-600' */
+  margin-left: auto; /* equivalent to 'ml-auto' */
+}
+
+.message-bubble-ai {
+  background-color: #f8fafc; /* equivalent to 'bg-slate-50' */
+  color: black; /* equivalent to 'text-black' */
+  margin-right: auto; /* equivalent to 'mr-auto' */
+}
+
+.message-prefix {
+  margin-right: 0.5rem; /* equivalent to 'mr-2' */
+}
+
+.message-content {
+  white-space: pre-wrap; /* equivalent to 'whitespace-pre-wrap' */
+  display: flex;
+  flex-direction: column; /* equivalent to 'flex flex-col' */
+}
+
+
+/* CSS for ChatWindow Component */
+
+.chat-window {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  padding: 1rem;
+  border-radius: 0.5rem;
+  overflow: hidden;
+  border: 1px solid #ccc;
+  background-color: #fff; /* Default light theme */
+  color: #000; /* Default light theme */
+  height: 400px; /* Adjust this value based on your requirement */
+  overflow-y: auto; /* Enables vertical scrolling */
+}
+
+.chat-window.dark-theme {
+  background-color: #000; /* Dark theme */
+  color: #fff; /* Dark theme */
+}
+
+.chat-button {
+  position: absolute;
+  bottom: 20px;
+  right: 20px;
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  font-size: 24px;
+}
+
+/* Additional styles for the form and input fields */
+.form-container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  padding: 1rem;
+  border: 1px solid;
+  bottom: 60px;
+  right: 20px;
+  width: 400px;
+  /* height: 500px; */
+}
+
+.input-field {
+  flex-grow: 1;
+  margin-right: 0.5rem;
+  padding: 0.25rem;
+  border-radius: 0.25rem;
+}
+
+.submit-button {
+  flex-shrink: 0;
+  padding: 0.5rem 2rem;
+  border-radius: 0.25rem;
+  width: 140px; /* Adjusted for 'w-28' class */
+}
+
+.chat-input {
+  display: flex;
+  /* position: relative; */
+  /* bottom: 10px; */
+}
