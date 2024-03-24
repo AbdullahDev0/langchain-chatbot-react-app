@@ -1,5 +1,5 @@
 import type { Message } from "ai/react";
-export function ChatMessageBubble(props: { message: Message, aiEmoji?: string, sources: any[] }) {
+export function ChatMessageBubble(props: { message: Message, aiEmoji?: string }) {
   const isUserMessage = props.message.role === "user";
   const bubbleClass = `message-bubble ${isUserMessage ? 'message-bubble-user' : 'message-bubble-ai'}`;
   const prefix = isUserMessage ? "🧑" : props.aiEmoji;

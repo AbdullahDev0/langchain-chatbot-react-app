@@ -18,6 +18,7 @@ export function ChatWindow(props: {
   const messageContainerRef = useRef<HTMLDivElement | null>(null);
   const [isChatOpen, setIsChatOpen] = useState(false);
   const [theme, setTheme] = useState('light');
+  const [failedMessages, setFailedMessages] = useState<{ id: string, content: string, role: 'assistant' }[]>([]);
 
   useEffect(() => {
     // Detect system theme and listen for changes
@@ -27,8 +28,6 @@ export function ChatWindow(props: {
     setTheme(mediaQuery.matches ? 'dark' : 'light');
     return () => mediaQuery.removeEventListener('change', themeChangeHandler);
   }, []);
-
-  
 
   const chatWindowStyles: CSSProperties = {
     flex: 1,
@@ -43,29 +42,39 @@ export function ChatWindow(props: {
   };
 
   const { endpoint, placeholder, emoji } = props;
-  
-  
+
+
   const [sourcesForMessages, setSourcesForMessages] = useState<Record<string, any>>({});
-  
+
   const { messages, input, handleInputChange, handleSubmit, isLoading: chatEndpointIsLoading } =
 
-  useChat({
-    api: endpoint,
-    onResponse(response) {
-      const sourcesHeader = response.headers.get("x-sources");
+    useChat({
+      api: endpoint,
+      onResponse(response) {
+        const sourcesHeader = response.headers.get("x-sources");
         const sources = sourcesHeader ? JSON.parse((Buffer.from(sourcesHeader, 'base64')).toString('utf8')) : [];
         const messageIndexHeader = response.headers.get("x-message-index");
         if (sources.length && messageIndexHeader !== null) {
           setSourcesForMessages({ ...sourcesForMessages, [messageIndexHeader]: sources });
         }
       },
+      // onError: (e) => {
+      //   toast(e.message, {
+      //     theme: "dark"
+      //   });
+      // }
       onError: (e) => {
-        toast(e.message, {
-          theme: "dark"
-        });
+        const failedMessage = {
+          id: `failed-${new Date().getTime()}`,
+          content: input,
+          role: 'assistant' as const,
+          createdAt: new Date().toISOString(),
+        };
+        setFailedMessages([...failedMessages, failedMessage]);
       }
-    });    
-    async function sendMessage(e: FormEvent<HTMLFormElement>) {
+
+    });
+  async function sendMessage(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
     if (messageContainerRef.current) {
       messageContainerRef.current.classList.add("grow");
@@ -77,51 +86,68 @@ export function ChatWindow(props: {
       return;
     }
     handleSubmit(e);
+
   }
   return (
     <>
-        <button className='chat-button' onClick={() => setIsChatOpen(!isChatOpen)}>
-            💬
-        </button>
-    <div style={chatWindowStyles}>
+      <button className='chat-button' onClick={() => setIsChatOpen(!isChatOpen)}>
+        💬
+      </button>
+      <div style={chatWindowStyles}>
 
         {isChatOpen && (
-            <div
-                ref={messageContainerRef}
-             >
-                {messages.length > 0 ? (
-                    [...messages]
-                        .map((m, i) => {
-                            const sourceKey = (messages.length - 1 - i).toString();
-                            return <ChatMessageBubble key={m.id} message={m} aiEmoji={emoji} sources={sourcesForMessages[sourceKey]} />
-                        })
-                ) : ""}
-            </div>
+          <div
+            ref={messageContainerRef}
+          // style={{ maxHeight: '300px' }}
+          >
+            {messages.length > 0 ? (
+              [...messages]
+                .map((m, i) =>
+                  <ChatMessageBubble key={m.id} message={m} aiEmoji={emoji} />
+                )
+            ) : ""}
+          </div>
         )}
 
         {isChatOpen && (
-            <form onSubmit={sendMessage} className="form-container">
-                <div className="chat-input">
-                    <input
-                        className="input-field"
-                        value={input}
-                        placeholder={placeholder ?? "Type your message here..."}
-                        onChange={handleInputChange}
-                    />
-                    <button type="submit" className="submit-button">
-                        {chatEndpointIsLoading ? (
-                            <div role="status" className="flex justify-center">
-                                <span>Loading...</span>
-                            </div>
-                        ) : "Send"}
-                    </button>
-                </div>
-            </form>
+          <div
+            ref={messageContainerRef}
+          >
+            {([...messages, ...failedMessages].length > 0) ? (
+              [...messages, ...failedMessages]
+                .map((m) => {
+                  console.log("Messages", m);
+
+                  return <ChatMessageBubble key={m.id} message={m} aiEmoji={emoji} />
+                })
+            ) : ""}
+          </div>
+        )}
+
+
+        {isChatOpen && (
+          <form onSubmit={sendMessage} className="form-container">
+            <div className="chat-input">
+              <input
+                className="input-field"
+                value={input}
+                placeholder={placeholder ?? "Type your message here..."}
+                onChange={handleInputChange}
+              />
+              <button type="submit" className="submit-button">
+                {chatEndpointIsLoading ? (
+                  <div role="status" className="flex justify-center">
+                    <span>Loading...</span>
+                  </div>
+                ) : "Send"}
+              </button>
+            </div>
+          </form>
         )}
 
         <ToastContainer />
-    </div>
+      </div>
     </>
-);
+  );
 
 }
