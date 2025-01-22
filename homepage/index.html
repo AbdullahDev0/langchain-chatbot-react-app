@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI Chat Assistant | Powered by LangChain</title>
+  <link rel="stylesheet" href="styles.css">
+
+  <!-- Font Awesome for icons -->
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+  >
+
+  <!-- Google Fonts -->
+  <link
+    href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Space+Grotesk:wght@400;500;700&display=swap"
+    rel="stylesheet"
+  >
+
+  <!-- 1) React/ReactDOM (UMD) must load first since your bundle has them as externals -->
+  <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+</head>
+<body>
+  <!-- Hero Section -->
+  <header class="hero">
+    <nav>
+      <div class="logo" style="padding-left: 5rem;">AI Assistant</div>
+      <div class="mobile-menu-btn">
+        <i class="fas fa-bars"></i>
+        <i class="fas fa-times"></i>
+      </div>
+      <div class="nav-links" style="padding-right: 5rem;">
+        <a href="#features">Features</a>
+        <a href="#about">About</a>
+        <a href="#benefits">Benefits</a>
+      </div>
+    </nav>
+    <div class="hero-content">
+      <h1>Next-Gen AI Chat Assistant</h1>
+      <p>Powered by LangChain & Advanced Language Models</p>
+
+      <!-- Chat Type Selector -->
+      <div class="chat-type-selector">
+        <button class="chat-type-btn active" data-endpoint="basic-chat">Basic Chat</button>
+        <button class="chat-type-btn" data-endpoint="context-aware-chat">Context Aware</button>
+        <button class="chat-type-btn" data-endpoint="document-chat">Document Chat</button>
+        <button class="chat-type-btn" data-endpoint="agent-chat">Research Agent</button>
+      </div>
+
+      <div class="chat-type-description">
+        <p id="chat-description">Experience natural conversations with our advanced AI assistant.</p>
+      </div>
+
+      <div class="hero-buttons">
+        <button class="secondary-btn">Learn More</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Features Section -->
+  <section id="features" class="features">
+    <h2>Intelligent Chat Solutions</h2>
+    <div class="features-grid">
+      <div class="feature-card">
+        <i class="fas fa-comments"></i>
+        <h3>Basic Chat</h3>
+        <p>Our foundational AI chat interface powered by advanced language models. Engage in natural conversations for:</p>
+        <div class="feature-details">
+          <div class="feature-item">
+            <i class="fas fa-check"></i>
+            <span>Quick questions and instant answers</span>
+          </div>
+          <div class="feature-item">
+            <i class="fas fa-check"></i>
+            <span>General knowledge exploration</span>
+          </div>
+          <div class="feature-item">
+            <i class="fas fa-check"></i>
+            <span>Writing assistance and creative brainstorming</span>
+          </div>
+          <div class="feature-item">
+            <i class="fas fa-check"></i>
+            <span>Interactive problem-solving guidance</span>
+          </div>
+        </div>
+      </div>
+      <div class="feature-card">
+        <i class="fas fa-memory"></i>
+        <h3>Context Aware Chat</h3>
+        <p>Enhanced with conversation memory for more natural and coherent dialogues. Experience:</p>
+        <div class="feature-details">
+          <div class="feature-item">
+            <i class="fas fa-check"></i>
+            <span>Seamless conversation memory and recall</span>
+          </div>
+          <div class="feature-item">
+            <i class="fas fa-check"></i>
+            <span>Intelligent context maintenance</span>
+          </div>
+          <div class="feature-item">
+            <i class="fas fa-check"></i>
+            <span>Natural follow-up discussions</span>
+          </div>
+          <div class="feature-item">
+            <i class="fas fa-check"></i>
+            <span>Complex multi-turn conversations</span>
+          </div>
+        </div>
+      </div>
+      <div class="feature-card">
+        <i class="fas fa-file-alt"></i>
+        <h3>Document Chat</h3>
+        <p>Intelligent document analysis and interaction capabilities. Unlock:</p>
+        <div class="feature-details">
+          <div class="feature-item">
+            <i class="fas fa-check"></i>
+            <span>Support for PDF, TXT, and DOC formats</span>
+          </div>
+          <div class="feature-item">
+            <i class="fas fa-check"></i>
+            <span>Smart content summarization</span>
+          </div>
+          <div class="feature-item">
+            <i class="fas fa-check"></i>
+            <span>Document-specific Q&A</span>
+          </div>
+          <div class="feature-item">
+            <i class="fas fa-check"></i>
+            <span>In-depth content analysis</span>
+          </div>
+        </div>
+      </div>
+      <div class="feature-card">
+        <i class="fas fa-search"></i>
+        <h3>Research Agent</h3>
+        <p>Powered by Tavily Search API for real-time information access. Delivers:</p>
+        <div class="feature-details">
+          <div class="feature-item">
+            <i class="fas fa-check"></i>
+            <span>Live web search integration</span>
+          </div>
+          <div class="feature-item">
+            <i class="fas fa-check"></i>
+            <span>Source-verified information</span>
+          </div>
+          <div class="feature-item">
+            <i class="fas fa-check"></i>
+            <span>Real-time news and updates</span>
+          </div>
+          <div class="feature-item">
+            <i class="fas fa-check"></i>
+            <span>Referenced research findings</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- About Section -->
+  <section id="about" class="about">
+    <div class="about-content">
+      <h2>About Our Technology</h2>
+      <div class="about-grid">
+        <div class="about-text">
+          <h3>LangChain Framework</h3>
+          <p>Our platform is built on LangChain, a cutting-edge framework that revolutionizes AI applications:</p>
+          <ul>
+            <li>Seamless integration with multiple AI models</li>
+            <li>Advanced memory and context management</li>
+            <li>Robust document processing capabilities</li>
+            <li>Flexible chain-of-thought reasoning</li>
+          </ul>
+        </div>
+        <div class="about-text">
+          <h3>AI Integration</h3>
+          <p>Our system leverages state-of-the-art AI technologies:</p>
+          <ul>
+            <li>Advanced language models for natural conversations</li>
+            <li>Tavily Search API for real-time research</li>
+            <li>Document processing pipelines for content analysis</li>
+            <li>Context-aware memory systems</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Benefits Section -->
+  <section id="benefits" class="benefits">
+    <h2>Why Choose Our AI Assistant?</h2>
+    <div class="benefits-grid">
+      <div class="benefit-card">
+        <i class="fas fa-clock"></i>
+        <h3>24/7 Availability</h3>
+        <p>Access intelligent assistance anytime:</p>
+        <ul>
+          <li>Instant responses</li>
+          <li>No waiting queues</li>
+          <li>Global accessibility</li>
+        </ul>
+      </div>
+      <div class="benefit-card">
+        <i class="fas fa-shield-alt"></i>
+        <h3>Secure & Private</h3>
+        <p>Your data security is our priority:</p>
+        <ul>
+          <li>Encrypted communications</li>
+          <li>Private conversations</li>
+          <li>Secure document handling</li>
+        </ul>
+      </div>
+      <div class="benefit-card">
+        <i class="fas fa-sync"></i>
+        <h3>Continuous Learning</h3>
+        <p>Stay ahead with evolving AI:</p>
+        <ul>
+          <li>Regular model updates</li>
+          <li>Enhanced capabilities</li>
+          <li>Latest information access</li>
+        </ul>
+      </div>
+      <div class="benefit-card">
+        <i class="fas fa-brain"></i>
+        <h3>Versatile Intelligence</h3>
+        <p>Multiple specialized chat modes:</p>
+        <ul>
+          <li>Task-specific assistants</li>
+          <li>Flexible interaction styles</li>
+          <li>Adaptive responses</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <div class="footer-content">
+      <div class="footer-section">
+        <h4>AI Assistant</h4>
+        <p>Powered by advanced AI technology</p>
+      </div>
+      <div class="footer-section">
+        <h4>Quick Links</h4>
+        <a href="#features">Features</a>
+        <a href="#about">About</a>
+        <a href="#benefits">Benefits</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2024 AI Assistant. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <!-- 2) Our React root element -->
+  <div id="root"></div>
+
+  <!-- 3) Set up initial chat configuration as a global object -->
+  <script>
+    window.chatConfig = {
+      endpoint: "http://localhost:3500/api/v1/langchain-chat/basic-chat",
+      titleText: "Basic Chat",
+      placeholder: "Type your message..."
+    };
+
+    // Chat type descriptions
+    const chatDescriptions = {
+      'basic-chat': 'Experience our core AI assistant for general queries, writing help, and problem-solving. Perfect for quick answers and brainstorming sessions.',
+      'context-aware-chat': 'Engage in sophisticated conversations with our memory-enhanced AI that remembers your chat history and maintains context throughout the dialogue.',
+      'document-chat': 'Analyze documents with our AI assistant. Get detailed insights, summaries, and answers based on your document content.',
+      'agent-chat': 'Access real-time information through our Tavily-powered research agent. Get fact-checked answers with reliable web references and current information.'
+    };
+
+    /**
+     * initializeChatBot:
+     *  This function calls your UMD library's mountApp method,
+     *  passing the current global config.
+     */
+    window.initializeChatBot = function() {
+      if (!window.LangChainReactApp || !window.LangChainReactApp.mountApp) {
+        console.error('LangChainReactApp not found. Make sure the UMD script is loaded.');
+        return;
+      }
+      window.LangChainReactApp.mountApp({
+        endpoint: window.chatConfig.endpoint,
+        titleText: window.chatConfig.titleText,
+        placeholder: window.chatConfig.placeholder
+      });
+    };
+  </script>
+
+  <!-- 4) Our logic for switching endpoints & re-initializing the chat -->
+  <script>
+    function initializeButtons() {
+      const buttons = document.querySelectorAll('.chat-type-btn');
+      const descriptionElement = document.getElementById('chat-description');
+      const rootElement = document.getElementById('root');
+
+      function switchEndpoint(endpoint, titleText) {
+        while (rootElement.firstChild) {
+          rootElement.removeChild(rootElement.firstChild);
+        }
+
+        // Update global chatConfig
+        window.chatConfig.endpoint = `http://localhost:3500/api/v1/langchain-chat/${endpoint}`;
+        window.chatConfig.titleText = titleText || 'AI Chat';
+        window.chatConfig.placeholder = "Type your message...";
+
+        // Update description text
+        descriptionElement.textContent = chatDescriptions[endpoint];
+
+        // Re-initialize the chat
+        window.initializeChatBot();
+      }
+
+      // Add event listeners for each chat-type button
+      buttons.forEach(button => {
+        button.addEventListener('click', function(e) {
+          e.preventDefault();
+          buttons.forEach(btn => btn.classList.remove('active'));
+          this.classList.add('active');
+
+          const endpoint = this.getAttribute('data-endpoint');
+          const titleText = this.textContent.trim();
+          switchEndpoint(endpoint, titleText);
+        });
+      });
+
+      // Optionally auto-click the 'active' button on load
+      const activeButton = document.querySelector('.chat-type-btn.active');
+      if (activeButton) {
+        const endpoint = activeButton.getAttribute('data-endpoint');
+        const titleText = activeButton.textContent.trim();
+        switchEndpoint(endpoint, titleText);
+      }
+    }
+
+    // Once the page loads, initialize button logic
+    window.addEventListener('load', function() {
+      initializeButtons();
+    });
+  </script>
+
+  <!-- 5) Load the UMD Chat Widget Script (built by your separate webpack.umd.config.js) -->
+  <script src="../dist/langchain-react-app.umd.js"></script>
+
+  <!-- 6) Add optional event listeners or debugging scripts -->
+  <script>
+    window.addEventListener('load', function() {
+      document.querySelectorAll('.chat-type-btn').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+        });
+      });
+    });
+  </script>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
+        const navLinks = document.querySelector('.nav-links');
+
+        mobileMenuBtn.addEventListener('click', () => {
+            mobileMenuBtn.classList.toggle('active');
+            navLinks.classList.toggle('active');
+        });
+
+        // Close menu when clicking a link
+        document.querySelectorAll('.nav-links a').forEach(link => {
+            link.addEventListener('click', () => {
+                mobileMenuBtn.classList.remove('active');
+                navLinks.classList.remove('active');
+            });
+        });
+    });
+  </script>
+</body>
+</html>

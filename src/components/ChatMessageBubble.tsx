@@ -1,8 +1,12 @@
 import type { Message } from "ai/react";
-export function ChatMessageBubble(props: { message: Message, aiEmoji?: string }) {
+import { AiFillRobot } from "react-icons/ai";
+import { IoPerson } from "react-icons/io5";
+
+export function ChatMessageBubble(props: { message: Message,   aiIcon?: string;
+  humanIcon?: string;   }) {
   const isUserMessage = props.message.role === "user";
   const bubbleClass = `message-bubble ${isUserMessage ? 'message-bubble-user' : 'message-bubble-ai'}`;
-  const prefix = isUserMessage ? "🧑" : props.aiEmoji;
+  const prefix = isUserMessage ? props.humanIcon?? <IoPerson/> : props.aiIcon ?? <AiFillRobot/>;
 
   return (
     <div className={bubbleClass}>
