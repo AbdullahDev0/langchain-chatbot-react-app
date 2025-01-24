@@ -258,10 +258,16 @@
 
   <!-- 3) Set up initial chat configuration as a global object -->
   <script>
+    const API_BASE_URL = window.location.hostname === 'localhost' 
+        ? 'http://localhost:3500'
+        : 'https://your-production-api-domain.com';
+
     window.chatConfig = {
-      endpoint: "http://localhost:3500/api/v1/langchain-chat/basic-chat",
-      titleText: "Basic Chat",
-      placeholder: "Type your message..."
+        endpoint: `${API_BASE_URL}/api/v1/langchain-chat/basic-chat`,
+        uploadEndpoint: `${API_BASE_URL}/api/v1/langchain-chat/process-document`,
+        titleText: "Basic Chat",
+        placeholder: "Type your message...",
+        showUpload: false
     };
 
     // Chat type descriptions
@@ -285,7 +291,8 @@
       window.LangChainReactApp.mountApp({
         endpoint: window.chatConfig.endpoint,
         titleText: window.chatConfig.titleText,
-        placeholder: window.chatConfig.placeholder
+        placeholder: window.chatConfig.placeholder,
+        showUpload: window.chatConfig.showUpload
       });
     };
   </script>
@@ -303,9 +310,11 @@
         }
 
         // Update global chatConfig
-        window.chatConfig.endpoint = `http://localhost:3500/api/v1/langchain-chat/${endpoint}`;
+        window.chatConfig.endpoint = `${API_BASE_URL}/api/v1/langchain-chat/${endpoint}`;
         window.chatConfig.titleText = titleText || 'AI Chat';
         window.chatConfig.placeholder = "Type your message...";
+        // Show upload button only for document-chat
+        window.chatConfig.showUpload = endpoint === 'document-chat';
 
         // Update description text
         descriptionElement.textContent = chatDescriptions[endpoint];

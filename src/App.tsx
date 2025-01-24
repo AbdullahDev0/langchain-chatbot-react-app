@@ -5,6 +5,8 @@ import { ChatWindow } from './components/ChatWindow';
 // Define a type for the expected props
 interface AppProps {
   endpoint?: string;
+  uploadEndpoint?: string;
+  showUpload?: boolean;
   placeholder?: string;
   titleText?: string;
   aiIcon?: string;
@@ -13,11 +15,13 @@ interface AppProps {
 }
 
 // Update the App component to accept props
-function App({ endpoint, aiIcon, titleText, placeholder, humanIcon, chatIcon }: AppProps) {
+function App({ endpoint, uploadEndpoint, showUpload=true, aiIcon, titleText, placeholder, humanIcon, chatIcon }: AppProps) {
   // Use props if they're provided, otherwise fall back to defaults
   return (
     <ChatWindow
-      endpoint={endpoint || "http://localhost:3500/api/v1/langchain-chat/context-aware-chat"}
+      endpoint={endpoint || "http://localhost:3500/api/v1/langchain-chat/session-document-chat"}
+      uploadEndpoint={uploadEndpoint}
+      showUpload={showUpload}
       aiIcon={aiIcon}
       humanIcon={humanIcon}
       chatIcon={chatIcon}

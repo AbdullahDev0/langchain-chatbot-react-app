@@ -200,3 +200,28 @@ body {
   background-color: #000; /* Dark mode color */
   color: white;
 }
+
+.upload-button {
+  padding: 4px 8px !important;
+  font-size: 12px !important;
+  cursor: pointer;
+}
+
+.upload-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.uploaded-file-name {
+  padding: 4px 8px;
+  border-radius: 4px;
+  max-width: 150px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.dark-theme .uploaded-file-name {
+  background-color: #374151;
+  color: #fff;
+}

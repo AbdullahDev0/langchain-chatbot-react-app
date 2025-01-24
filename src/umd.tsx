@@ -1,8 +1,6 @@
-
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import App from './App';
-
 
 declare global {
   interface Window {
@@ -22,7 +20,6 @@ export function mountApp(config?: Record<string, any>) {
     return;
   }
 
-  
   const userConfig = { ...window.chatConfig, ...config };
 
   const root = ReactDOM.createRoot(rootElement);
@@ -30,6 +27,8 @@ export function mountApp(config?: Record<string, any>) {
     <React.StrictMode>
       <App
         endpoint={userConfig.endpoint}
+        uploadEndpoint={userConfig.uploadEndpoint}
+        showUpload={userConfig.showUpload}
         aiIcon={userConfig.aiIcon}
         titleText={userConfig.titleText}
         placeholder={userConfig.placeholder}

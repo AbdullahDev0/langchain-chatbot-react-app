@@ -17,10 +17,16 @@ export function ChatWindow(props: {
   humanIcon?: string;
   chatIcon?: string;
   initialMessage?: string;
+  uploadEndpoint?: string;
+  showUpload?: boolean;
 }) {
   const messageContainerRef = useRef<HTMLDivElement | null>(null);
   const [isChatOpen, setIsChatOpen] = useState(false);
   const [theme, setTheme] = useState("light");
+  const [isUploading, setIsUploading] = useState(false);
+  const [uploadedFile, setUploadedFile] = useState<string | null>(null);
+  const [sessionId, setSessionId] = useState<string | null>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
@@ -70,6 +76,9 @@ const chatWindowStyles: CSSProperties = {
     isLoading: chatEndpointIsLoading,
   } = useChat({
     api: endpoint,
+    body: props.showUpload && sessionId ? {
+      sessionId: sessionId
+    } : undefined,
     onResponse(response) {
       const sourcesHeader = response.headers.get("x-sources");
       const sources = sourcesHeader
@@ -113,6 +122,9 @@ const chatWindowStyles: CSSProperties = {
     }
   },[])
 
+  // Get upload endpoint from props or use default
+  const uploadEndpoint = props.uploadEndpoint || 'http://localhost:3500/api/v1/langchain-chat/process-document';
+
   async function sendMessage(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
     if (messageContainerRef.current) {
@@ -126,6 +138,63 @@ const chatWindowStyles: CSSProperties = {
     }
     handleSubmit(e);
   }
+
+  const handleFileUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    setIsUploading(true);
+    
+    // Generate a unique session ID
+    const newSessionId = `session_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+    
+    const formData = new FormData();
+    formData.append('file', file);
+    formData.append('sessionId', newSessionId);
+
+    try {
+      const response = await fetch(uploadEndpoint, {
+        method: 'POST',
+        body: formData,
+      });
+
+      if (!response.ok) {
+        throw new Error('Upload failed');
+      }
+
+      const data = await response.json();
+      
+      // Store session ID and filename in component state
+      setSessionId(newSessionId);
+      setUploadedFile(file.name);
+
+      // Show success message
+      messages.push({
+        id: 'upload-' + Date.now(),
+        content: `Document "${file.name}" uploaded successfully!`,
+        createdAt: new Date(Date.now()),
+        role: "assistant"
+      });
+
+    } catch (error) {
+      // Show error message
+      messages.push({
+        id: 'error-' + Date.now(),
+        content: "Failed to upload document. Please try again.",
+        createdAt: new Date(Date.now()),
+        role: "assistant"
+      });
+      setSessionId(null);
+      setUploadedFile(null);
+    } finally {
+      setIsUploading(false);
+      // Clear the file input
+      if (fileInputRef.current) {
+        fileInputRef.current.value = '';
+      }
+    }
+  };
+
   return (
     <>
       <button
@@ -137,18 +206,39 @@ const chatWindowStyles: CSSProperties = {
       <div style={chatWindowStyles}>
         {isChatOpen && (
           <>
-            <div className="chat-header" style={{ display: "flex", justifyContent: 'space-between' }}>
+            <div className="chat-header" style={{ display: "flex", justifyContent: 'space-between', alignItems: 'center' }}>
               <div>{titleText}</div>
-              <button onClick={toggleTheme} className="theme-toggle-button">
-                <div className={theme === 'dark' ? "icon-wrapper" : "icon-wrapper dark-mode"}>
-                  {theme === 'dark' ? (
-                    <MdLightMode />
-                  ) : (
-                    <MdDarkMode />
-                  )}
-                </div>
-              </button>
-
+              <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+                {props.showUpload && (
+                  <>
+                    <input
+                      type="file"
+                      ref={fileInputRef}
+                      onChange={handleFileUpload}
+                      style={{ display: 'none' }}
+                      accept=".pdf,.doc,.docx,.txt"
+                    />
+                    {uploadedFile ? (
+                      <div className="uploaded-file-name" style={{ fontSize: '12px' }}>
+                        {uploadedFile}
+                      </div>
+                    ) : (
+                      <button 
+                        onClick={() => fileInputRef.current?.click()}
+                        className="submit-button upload-button"
+                        disabled={isUploading}
+                      >
+                        {isUploading ? 'Uploading...' : 'Upload Doc'}
+                      </button>
+                    )}
+                  </>
+                )}
+                <button onClick={toggleTheme} className="theme-toggle-button">
+                  <div className={theme === 'dark' ? "icon-wrapper" : "icon-wrapper dark-mode"}>
+                    {theme === 'dark' ? <MdLightMode /> : <MdDarkMode />}
+                  </div>
+                </button>
+              </div>
             </div>
             <div className="chat-container">
               <div
