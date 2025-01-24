@@ -45,7 +45,7 @@
       <div class="chat-type-selector">
         <button class="chat-type-btn active" data-endpoint="basic-chat">Basic Chat</button>
         <button class="chat-type-btn" data-endpoint="context-aware-chat">Context Aware</button>
-        <button class="chat-type-btn" data-endpoint="document-chat">Document Chat</button>
+        <button class="chat-type-btn" data-endpoint="session-document-chat">Document Chat</button>
         <button class="chat-type-btn" data-endpoint="agent-chat">Research Agent</button>
       </div>
 
@@ -260,7 +260,7 @@
   <script>
     const API_BASE_URL = window.location.hostname === 'localhost' 
         ? 'http://localhost:3500'
-        : 'https://your-production-api-domain.com';
+        : 'https://langchain-server.thedevstools.com';
 
     window.chatConfig = {
         endpoint: `${API_BASE_URL}/api/v1/langchain-chat/basic-chat`,
@@ -270,12 +270,24 @@
         showUpload: false
     };
 
-    // Chat type descriptions
-    const chatDescriptions = {
-      'basic-chat': 'Experience our core AI assistant for general queries, writing help, and problem-solving. Perfect for quick answers and brainstorming sessions.',
-      'context-aware-chat': 'Engage in sophisticated conversations with our memory-enhanced AI that remembers your chat history and maintains context throughout the dialogue.',
-      'document-chat': 'Analyze documents with our AI assistant. Get detailed insights, summaries, and answers based on your document content.',
-      'agent-chat': 'Access real-time information through our Tavily-powered research agent. Get fact-checked answers with reliable web references and current information.'
+    // Chat type descriptions and configurations
+    const chatTypes = {
+      'basic-chat': {
+        description: 'Experience our core AI assistant for general queries, writing help, and problem-solving. Perfect for quick answers and brainstorming sessions.',
+        showUpload: false
+      },
+      'context-aware-chat': {
+        description: 'Engage in sophisticated conversations with our memory-enhanced AI that remembers your chat history and maintains context throughout the dialogue.',
+        showUpload: false
+      },
+      'session-document-chat': {
+        description: 'Analyze documents with our AI assistant. Get detailed insights, summaries, and answers based on your document content.',
+        showUpload: true
+      },
+      'agent-chat': {
+        description: 'Access real-time information through our Tavily-powered research agent. Get fact-checked answers with reliable web references and current information.',
+        showUpload: false
+      }
     };
 
     /**
@@ -292,7 +304,8 @@
         endpoint: window.chatConfig.endpoint,
         titleText: window.chatConfig.titleText,
         placeholder: window.chatConfig.placeholder,
-        showUpload: window.chatConfig.showUpload
+        showUpload: window.chatConfig.showUpload,
+        uploadEndpoint: window.chatConfig.showUpload ? window.chatConfig.uploadEndpoint : undefined
       });
     };
   </script>
@@ -313,11 +326,10 @@
         window.chatConfig.endpoint = `${API_BASE_URL}/api/v1/langchain-chat/${endpoint}`;
         window.chatConfig.titleText = titleText || 'AI Chat';
         window.chatConfig.placeholder = "Type your message...";
-        // Show upload button only for document-chat
-        window.chatConfig.showUpload = endpoint === 'document-chat';
+        window.chatConfig.showUpload = chatTypes[endpoint].showUpload;
 
         // Update description text
-        descriptionElement.textContent = chatDescriptions[endpoint];
+        descriptionElement.textContent = chatTypes[endpoint].description;
 
         // Re-initialize the chat
         window.initializeChatBot();
@@ -336,7 +348,7 @@
         });
       });
 
-      // Optionally auto-click the 'active' button on load
+      // Initialize with active button
       const activeButton = document.querySelector('.chat-type-btn.active');
       if (activeButton) {
         const endpoint = activeButton.getAttribute('data-endpoint');

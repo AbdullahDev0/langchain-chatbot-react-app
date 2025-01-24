@@ -15,7 +15,7 @@ interface AppProps {
 }
 
 // Update the App component to accept props
-function App({ endpoint, uploadEndpoint, showUpload=true, aiIcon, titleText, placeholder, humanIcon, chatIcon }: AppProps) {
+function App({ endpoint, uploadEndpoint, showUpload, aiIcon, titleText, placeholder, humanIcon, chatIcon }: AppProps) {
   // Use props if they're provided, otherwise fall back to defaults
   return (
     <ChatWindow
