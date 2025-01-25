@@ -26,13 +26,13 @@
   <!-- Hero Section -->
   <header class="hero">
     <nav>
-      <div class="logo" style="padding-left: 5rem;">AI Assistant</div>
+      <div class="logo" style="padding-left: 5rem;">Abdullah Irfan</div>
       <div class="mobile-menu-btn">
         <i class="fas fa-bars"></i>
         <i class="fas fa-times"></i>
       </div>
       <div class="nav-links" style="padding-right: 5rem;">
-        <a href="#features">Features</a>
+        <a href="#features">Projects</a>
         <a href="#about">About</a>
         <a href="#benefits">Benefits</a>
       </div>
@@ -43,25 +43,28 @@
 
       <!-- Chat Type Selector -->
       <div class="chat-type-selector">
-        <button class="chat-type-btn active" data-endpoint="basic-chat">Basic Chat</button>
+        <button class="chat-type-btn" data-endpoint="basic-chat">Basic Chat</button>
         <button class="chat-type-btn" data-endpoint="context-aware-chat">Context Aware</button>
         <button class="chat-type-btn" data-endpoint="session-document-chat">Document Chat</button>
         <button class="chat-type-btn" data-endpoint="agent-chat">Research Agent</button>
       </div>
 
       <div class="chat-type-description">
-        <p id="chat-description">Experience natural conversations with our advanced AI assistant.</p>
+        <p id="chat-description">Experience natural conversations with my AI assistant, built using LangChain and React.</p>
       </div>
 
-      <div class="hero-buttons">
-        <button class="secondary-btn">Learn More</button>
+      <div class="social-links">
+        <a href="https://github.com/AbdullahDev0" target="_blank"><i class="fab fa-github"></i> GitHub</a>
+        <a href="https://medium.com/@abdullahirfan99_80517" target="_blank"><i class="fab fa-medium"></i> Medium</a>
+        <a href="https://www.linkedin.com/in/abdullah-irfan-44b251105/" target="_blank"><i class="fab fa-linkedin"></i> LinkedIn</a>
       </div>
     </div>
   </header>
 
   <!-- Features Section -->
   <section id="features" class="features">
-    <h2>Intelligent Chat Solutions</h2>
+    <h2>About This Project</h2>
+    <p class="section-description">This demo page showcases a real-time AI chat interface built with ReactJS CDN and HTML/CSS/JS frontend. The chat widget is developed using React components and the responses are streamed directly from LLM models through LangChain integration.</p>
     <div class="features-grid">
       <div class="feature-card">
         <i class="fas fa-comments"></i>
@@ -161,27 +164,10 @@
   <!-- About Section -->
   <section id="about" class="about">
     <div class="about-content">
-      <h2>About Our Technology</h2>
+      <h2>About Me</h2>
       <div class="about-grid">
         <div class="about-text">
-          <h3>LangChain Framework</h3>
-          <p>Our platform is built on LangChain, a cutting-edge framework that revolutionizes AI applications:</p>
-          <ul>
-            <li>Seamless integration with multiple AI models</li>
-            <li>Advanced memory and context management</li>
-            <li>Robust document processing capabilities</li>
-            <li>Flexible chain-of-thought reasoning</li>
-          </ul>
-        </div>
-        <div class="about-text">
-          <h3>AI Integration</h3>
-          <p>Our system leverages state-of-the-art AI technologies:</p>
-          <ul>
-            <li>Advanced language models for natural conversations</li>
-            <li>Tavily Search API for real-time research</li>
-            <li>Document processing pipelines for content analysis</li>
-            <li>Context-aware memory systems</li>
-          </ul>
+          <p>I specialize in bringing your digital ideas to life with tailored app development and ongoing support, even if you're not a tech expert. Whether you're looking to develop a new app, improve an existing one, or need reliable tech support, I'm here to simplify the process and deliver powerful solutions.</p>
         </div>
       </div>
     </div>
@@ -312,28 +298,37 @@
 
   <!-- 4) Our logic for switching endpoints & re-initializing the chat -->
   <script>
+    // Move switchEndpoint outside to make it globally available
+    function switchEndpoint(endpoint, titleText, openChat = true) {
+      const rootElement = document.getElementById('root');
+      const descriptionElement = document.getElementById('chat-description');
+
+      while (rootElement.firstChild) {
+        rootElement.removeChild(rootElement.firstChild);
+      }
+
+      // Update global chatConfig
+      window.chatConfig.endpoint = `${API_BASE_URL}/api/v1/langchain-chat/${endpoint}`;
+      window.chatConfig.titleText = titleText || 'AI Chat';
+      window.chatConfig.placeholder = "Type your message...";
+      window.chatConfig.showUpload = chatTypes[endpoint].showUpload;
+
+      // Update description text
+      descriptionElement.textContent = chatTypes[endpoint].description;
+
+      // Re-initialize the chat and force it to open
+      window.initializeChatBot();
+      // Force the chat to open by simulating a click on the chat button
+      setTimeout(() => {
+        const chatButton = document.querySelector('.chat-button');
+        if (chatButton && !document.querySelector('.chat-header') && openChat) {
+          chatButton.click();
+        }
+      }, 100);
+    }
+
     function initializeButtons() {
       const buttons = document.querySelectorAll('.chat-type-btn');
-      const descriptionElement = document.getElementById('chat-description');
-      const rootElement = document.getElementById('root');
-
-      function switchEndpoint(endpoint, titleText) {
-        while (rootElement.firstChild) {
-          rootElement.removeChild(rootElement.firstChild);
-        }
-
-        // Update global chatConfig
-        window.chatConfig.endpoint = `${API_BASE_URL}/api/v1/langchain-chat/${endpoint}`;
-        window.chatConfig.titleText = titleText || 'AI Chat';
-        window.chatConfig.placeholder = "Type your message...";
-        window.chatConfig.showUpload = chatTypes[endpoint].showUpload;
-
-        // Update description text
-        descriptionElement.textContent = chatTypes[endpoint].description;
-
-        // Re-initialize the chat
-        window.initializeChatBot();
-      }
 
       // Add event listeners for each chat-type button
       buttons.forEach(button => {
@@ -348,7 +343,7 @@
         });
       });
 
-      // Initialize with active button
+      // Initialize with active button but don't auto-open
       const activeButton = document.querySelector('.chat-type-btn.active');
       if (activeButton) {
         const endpoint = activeButton.getAttribute('data-endpoint');
@@ -360,6 +355,9 @@
     // Once the page loads, initialize button logic
     window.addEventListener('load', function() {
       initializeButtons();
+      setTimeout(() => {
+        switchEndpoint('basic-chat', 'Basic Chat', false);
+      }, 500); 
     });
   </script>
 
