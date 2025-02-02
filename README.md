@@ -14,6 +14,16 @@ A flexible and customizable React chat component that supports context-aware con
 - 🧠 **Powered by LangChain for AI-driven chat interactions**
 - 🔓 **Open-source under the Mozilla Public License 2.0 (MPL 2.0)**
 
+AI chatbot was originally built to support four powerful chat modes, making it highly adaptable for different use cases:
+
+1. Simple Chat – Standard AI-powered Q&A interactions for general conversations.
+
+2. Contextual Chat – Maintains conversation history to provide context-aware responses across multiple interactions.
+
+3. Document-Based Chat – Allows users to upload documents (PDF, DOC, TXT), with retrieval powered by vector stores (PostgreSQL/Redis) for efficient search and knowledge extraction.
+
+4. Agent-Assisted Chat (Tavily Search) – Enables real-time web search using Tavily API, providing the latest information from the internet.
+
 ## Installation (NPM Package)
 
 You can install the package from NPM:
