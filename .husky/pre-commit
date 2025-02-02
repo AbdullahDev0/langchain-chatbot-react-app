@@ -2,3 +2,8 @@
 . "$(dirname -- "$0")/_/husky.sh"
 
 npx lint-staged
+
+if git diff --cached --quiet; then
+  echo "⚠ No changes detected after linting. Skipping commit."
+  exit 1
+fi

@@ -1,6 +1,6 @@
 {
   "name": "langchain-react-app",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "private": true,
   "dependencies": {
     "@langchain/community": "^0.0.34",
