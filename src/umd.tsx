@@ -1,6 +1,6 @@
-import React from 'react';
-import ReactDOM from 'react-dom/client';
-import App from './App';
+import React from "react";
+import ReactDOM from "react-dom/client";
+import App from "./App";
 
 declare global {
   interface Window {
@@ -14,7 +14,7 @@ declare global {
  * on `window.LangChainReactApp.mountApp` in the UMD build.
  */
 export function mountApp(config?: Record<string, any>) {
-  const rootElement = document.getElementById('root');
+  const rootElement = document.getElementById("root");
   if (!rootElement) {
     console.error('No <div id="root"></div> in the HTML.');
     return;
@@ -35,6 +35,6 @@ export function mountApp(config?: Record<string, any>) {
         humanIcon={userConfig.humanIcon}
         chatIcon={userConfig.chatIcon}
       />
-    </React.StrictMode>
+    </React.StrictMode>,
   );
 }
