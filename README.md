@@ -1,46 +1,169 @@
-# Getting Started with Create React App
+# React AI Chat Component
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+A flexible and customizable React chat component that supports context-aware conversations and document processing. This component provides a modern chat interface with support for file uploads, dark/light mode, and intermediate step visualization for AI responses.
 
-## Available Scripts
+## Features
 
-In the project directory, you can run:
+- 🤖 Context-aware AI chat interface
+- 📁 Document upload and processing
+- 🌓 Dark/light mode support with system preference detection
+- 💬 Intermediate step visualization for AI actions
+- 📱 Responsive design (mobile & desktop)
+- ⚙️ Highly customizable (icons, text, endpoints)
+- 🌍 **UMD build for easy integration into HTML files** (No build step required!)
 
-### `yarn start`
+## Installation (NPM Package)
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+You can install the package from NPM:
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+```bash
+yarn add langchain-chatbot-react-app
+```
 
-### `yarn test`
+or using npm:
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+```bash
+npm install langchain-chatbot-react-app
+```
 
-### `yarn build`
+## UMD Usage (Direct HTML Integration)
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+This component is built as a **UMD (Universal Module Definition) bundle**, making it easy to use in HTML pages without requiring a build step. This is useful for integrating the chat component into existing websites or content management systems.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+### Basic HTML Integration
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+1. Add the required React and ReactDOM scripts in your HTML `<head>`:
 
-### `yarn eject`
+```html
+<head>
+  <!-- React and ReactDOM must be loaded before the component -->
+  <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+  
+  <!-- Your chat component UMD bundle -->
+  <script src="path/to/your/build/chat-component.umd.js"></script>
+</head>
+```
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+2. Add the root div at the end of your HTML body:
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+```html
+<body>
+  <!-- Your existing content -->
+  <div id="root"></div>
+</body>
+```
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+3. Initialize the chat component:
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+```html
+<script>
+  window.LangChainReactApp.mountApp({
+    endpoint: window.chatConfig.endpoint,
+    titleText: window.chatConfig.titleText,
+    placeholder: window.chatConfig.placeholder,
+    showUpload: window.chatConfig.showUpload,
+    uploadEndpoint: window.chatConfig.showUpload ? window.chatConfig.uploadEndpoint : undefined
+  });
+</script>
+```
 
-## Learn More
+### Configuration via Global Object
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+Instead of passing options manually, you can set configuration through a global `chatConfig` object:
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+```html
+<script>
+  window.chatConfig = {
+    endpoint: 'https://your-api.example.com/chat',
+    titleText: 'Custom Chat Title',
+    placeholder: 'Type your message...',
+    showUpload: true,
+    uploadEndpoint: 'https://your-api.example.com/upload'
+  };
+</script>
+```
+
+## Building UMD Bundle
+
+To generate the UMD bundle for distribution:
+
+```bash
+yarn build:umd
+```
+
+The resulting bundle will be available in the `build/` directory and can be served from your preferred hosting solution.
+
+## Configuration Options
+
+| Property | Type | Description | Default |
+|----------|------|-------------|---------|
+| `endpoint` | string | Main chat API endpoint | `http://localhost:3500/api/v1/langchain-chat/session-document-chat` |
+| `uploadEndpoint` | string | Document upload API endpoint | `http://localhost:3500/api/v1/langchain-chat/process-document` |
+| `showUpload` | boolean | Enable/disable file upload feature | `false` |
+| `placeholder` | string | Input field placeholder text | "Ask a question..." |
+| `titleText` | string | Chat window title | "Chatbot" |
+| `aiIcon` | ReactNode | Custom AI message icon | Robot icon |
+| `humanIcon` | ReactNode | Custom user message icon | Person icon |
+| `chatIcon` | ReactNode | Custom chat toggle button icon | Robot icon |
+
+## API Requirements
+
+### Chat Endpoint
+
+The chat endpoint should accept POST requests with the following structure:
+
+```typescript
+{
+  messages: Array<{
+    content: string;
+    role: "user" | "assistant";
+  }>;
+  sessionId?: string; // Required when showUpload is true
+}
+```
+
+#### Expected Response:
+- Stream of text for normal responses
+- JSON object for intermediate steps (must be valid AgentStep format)
+
+#### Headers for source attribution:
+- `x-sources`: Base64 encoded JSON array of sources (optional)
+- `x-message-index`: Message index for source mapping
+
+### Upload Endpoint
+
+The upload endpoint should accept POST requests with FormData containing:
+- `file`: File object (supported formats: .pdf, .doc, .docx, .txt)
+- `sessionId`: Unique session identifier
+
+#### Expected Response:
+
+```typescript
+{
+  success: boolean;
+  error?: string;
+}
+```
+
+## Error Handling
+
+The component handles various error scenarios:
+- Network connectivity issues
+- API timeout
+- File upload failures
+- Invalid responses
+
+Error messages are displayed in the chat interface with user-friendly messages.
+
+## Development
+
+### Start Development Server
+```bash
+yarn start
+```
+
+### Build for Production
+```bash
+yarn build
+```

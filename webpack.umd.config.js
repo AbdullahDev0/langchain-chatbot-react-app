@@ -6,7 +6,7 @@ module.exports = {
   mode: 'production', 
   entry: './src/umd.tsx',   
   output: {
-    path: path.resolve(__dirname, 'homepage/dist'),
+    path: path.resolve(__dirname, 'build'),
     filename: 'langchain-react-app.umd.js',
     library: 'LangChainReactApp',   
     libraryTarget: 'umd',           

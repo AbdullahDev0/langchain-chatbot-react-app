@@ -1,7 +1,39 @@
 {
-  "name": "langchain-react-app",
+  "name": "langchain-chatbot-react-app",
   "version": "1.0.0",
-  "private": true,
+  "description": "A flexible and customizable React chat component that supports context-aware conversations and document processing",
+  "private": false,
+  "main": "dist/index.js",
+  "module": "dist/index.esm.js",
+  "umd": "dist/index.umd.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "keywords": [
+    "react",
+    "chatbot",
+    "langchain",
+    "ai",
+    "chat-component",
+    "document-processing",
+    "umd"
+  ],
+  "author": {
+    "name": "Abdullah Irfan",
+    "email": "abdullahirfandev@gmail.com",
+    "url": "https://github.com/AbdullahDev0"
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AbdullahDev0/langchain-chatbot-react-app.git"
+  },
+  "peerDependencies": {
+    "react": ">=18.2.0",
+    "react-dom": ">=18.2.0"
+  },
   "dependencies": {
     "@langchain/community": "^0.0.34",
     "@langchain/openai": "^0.0.15",
