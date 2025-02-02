@@ -1,0 +1,9 @@
+src/
+.github/
+.husky/
+.vscode/
+.gitignore
+.prettierrc
+tsconfig.json
+webpack.config.js
+*.test.*
