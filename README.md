@@ -11,6 +11,8 @@ A flexible and customizable React chat component that supports context-aware con
 - 📱 Responsive design (mobile & desktop)
 - ⚙️ Highly customizable (icons, text, endpoints)
 - 🌍 **UMD build for easy integration into HTML files** (No build step required!)
+- 🧠 **Powered by LangChain for AI-driven chat interactions**
+- 🔓 **Open-source under the Mozilla Public License 2.0 (MPL 2.0)**
 
 ## Installation (NPM Package)
 
@@ -84,6 +86,19 @@ Instead of passing options manually, you can set configuration through a global 
 </script>
 ```
 
+## Built with LangChain
+
+This chat component is powered by **LangChain**, which provides AI-driven natural language processing capabilities. The following LangChain packages are used:
+- `langchain`
+- `@langchain/community`
+- `@langchain/openai`
+
+These packages allow for context-aware responses, intelligent chat processing, and integration with OpenAI models.
+
+## License
+
+This project is **open-source** and licensed under the **Mozilla Public License 2.0 (MPL 2.0)**. This ensures that any modifications to this project remain open-source while allowing it to be combined with proprietary software. See the full license in the `LICENSE` file or visit [Mozilla Public License 2.0](https://www.mozilla.org/en-US/MPL/2.0/).
+
 ## Building UMD Bundle
 
 To generate the UMD bundle for distribution:
@@ -94,76 +109,6 @@ yarn build:umd
 
 The resulting bundle will be available in the `build/` directory and can be served from your preferred hosting solution.
 
-## Configuration Options
+## Contribution and Feedback
 
-| Property | Type | Description | Default |
-|----------|------|-------------|---------|
-| `endpoint` | string | Main chat API endpoint | `http://localhost:3500/api/v1/langchain-chat/session-document-chat` |
-| `uploadEndpoint` | string | Document upload API endpoint | `http://localhost:3500/api/v1/langchain-chat/process-document` |
-| `showUpload` | boolean | Enable/disable file upload feature | `false` |
-| `placeholder` | string | Input field placeholder text | "Ask a question..." |
-| `titleText` | string | Chat window title | "Chatbot" |
-| `aiIcon` | ReactNode | Custom AI message icon | Robot icon |
-| `humanIcon` | ReactNode | Custom user message icon | Person icon |
-| `chatIcon` | ReactNode | Custom chat toggle button icon | Robot icon |
-
-## API Requirements
-
-### Chat Endpoint
-
-The chat endpoint should accept POST requests with the following structure:
-
-```typescript
-{
-  messages: Array<{
-    content: string;
-    role: "user" | "assistant";
-  }>;
-  sessionId?: string; // Required when showUpload is true
-}
-```
-
-#### Expected Response:
-- Stream of text for normal responses
-- JSON object for intermediate steps (must be valid AgentStep format)
-
-#### Headers for source attribution:
-- `x-sources`: Base64 encoded JSON array of sources (optional)
-- `x-message-index`: Message index for source mapping
-
-### Upload Endpoint
-
-The upload endpoint should accept POST requests with FormData containing:
-- `file`: File object (supported formats: .pdf, .doc, .docx, .txt)
-- `sessionId`: Unique session identifier
-
-#### Expected Response:
-
-```typescript
-{
-  success: boolean;
-  error?: string;
-}
-```
-
-## Error Handling
-
-The component handles various error scenarios:
-- Network connectivity issues
-- API timeout
-- File upload failures
-- Invalid responses
-
-Error messages are displayed in the chat interface with user-friendly messages.
-
-## Development
-
-### Start Development Server
-```bash
-yarn start
-```
-
-### Build for Production
-```bash
-yarn build
-```
+We welcome contributions and constructive criticism to improve this project! If you have suggestions, feature requests, or find a bug, feel free to open an issue or a pull request on our [GitHub repository](https://github.com/AbdullahDev0/langchain-chatbot-react-app). Your feedback is highly appreciated and helps us make this chat component even better.
